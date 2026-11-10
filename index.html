@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Arham Naeem: senior full-stack engineer (Node.js, TypeScript, AI agents and LLM integration), based in Karachi, working remotely.">
+<meta property="og:title" content="Arham Naeem | Full-Stack Engineer">
+<meta property="og:description" content="Node.js / TypeScript, AI voice agents, LLM integration and production systems end to end.">
+<title>Arham Naeem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a reading column that opens on a live request-trace diagram; the page follows a request from interface to data to deployment. */
+:root {
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --fg: #141a24;
+  --muted: #5a6577;
+  --line: #dde2ea;
+  --accent: #2847d4;
+  --accent-soft: #e6eafc;
+  --signal: #0f8a6a;
+  --signal-soft: #def5ee;
+  --danger: #c2372f;
+  --danger-soft: #fbe4e2;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1117; --surface: #151b24; --fg: #e7ebf2; --muted: #95a0b3; --line: #273041;
+    --accent: #8ea0ff; --accent-soft: #1c2440; --signal: #4fd1a8; --signal-soft: #12302a;
+    --danger: #ff8a80; --danger-soft: #3a1c1c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1117; --surface: #151b24; --fg: #e7ebf2; --muted: #95a0b3; --line: #273041;
+  --accent: #8ea0ff; --accent-soft: #1c2440; --signal: #4fd1a8; --signal-soft: #12302a;
+  --danger: #ff8a80; --danger-soft: #3a1c1c; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-x: hidden;
+}
+.progress { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; height: 3px; z-index: 20; pointer-events: none; }
+.progress i { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 56px 72px; display: grid; gap: 96px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.1; }
+.label { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.hero-text { display: grid; gap: 24px; min-width: 0; }
+.hero h1 { font-size: clamp(46px, 8vw, 88px); font-weight: 800; letter-spacing: -0.025em; }
+.hero h1 .ch { display: inline-block; }
+.role { font-family: var(--mono); font-size: 14px; color: var(--accent); }
+.thesis { font-size: clamp(19px, 2.3vw, 22px); max-width: 32em; margin: 0; }
+.rotator { display: inline-grid; vertical-align: bottom; overflow: hidden; height: 1.6em; }
+.rotator span { grid-area: 1 / 1; color: var(--accent); font-weight: 600; white-space: nowrap; }
+.contact { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; font-size: 15px; }
+.email { font-family: var(--mono); user-select: all; }
+.btn { font: 500 13px var(--mono); background: var(--accent-soft); color: var(--accent); border: 1px solid transparent; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.clocks { display: flex; flex-wrap: wrap; gap: 8px; }
+.clock { font-family: var(--mono); font-size: 13px; border: 1px solid var(--line); background: var(--surface); padding: 6px 12px; border-radius: 6px; font-variant-numeric: tabular-nums; }
+.clock b { font-weight: 500; }
+.clock span { color: var(--muted); }
+.clock.home { border-color: var(--accent); }
+.clock .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--signal); margin-right: 6px; vertical-align: 1px; }
+
+/* Trace diagram */
+.trace { width: 100%; max-width: 100%; height: auto; display: block; }
+.trace .wire { fill: none; stroke: var(--line); stroke-width: 2; }
+.trace .wire.flow { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 10; opacity: .55; }
+.trace .node rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.trace .node.hot rect { stroke: var(--accent); }
+.trace .node text { fill: var(--fg); font: 500 13px var(--mono); }
+.trace .node .sub { fill: var(--muted); font-size: 10.5px; }
+.trace .pkt { fill: var(--accent); }
+.trace .pkt.alt { fill: var(--signal); }
+.trace-cap { font-family: var(--mono); font-size: 12px; color: var(--muted); text-align: center; margin-top: 6px; }
+
+/* Outcomes */
+.outcomes { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.outcome { padding: 22px 16px 22px 0; display: grid; gap: 4px; align-content: start; }
+.outcome strong { font-family: var(--display); font-size: 38px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.outcome span { font-size: 14px; color: var(--muted); }
+
+section { display: grid; gap: 28px; }
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; }
+.sec-head h2, h2.sec-head { font-size: clamp(28px, 4vw, 42px); font-weight: 700; }
+.sec-head p { margin: 0; color: var(--muted); max-width: 36em; }
+
+/* Live demo */
+.demo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.pane { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; min-width: 0; }
+.pane-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); font: 500 12px var(--mono); color: var(--muted); }
+.pane textarea { width: 100%; min-height: 230px; border: 0; resize: vertical; padding: 14px; font: 14px/1.6 var(--mono); background: transparent; color: var(--fg); }
+.out { padding: 14px; font: 14px/1.7 var(--mono); white-space: pre-wrap; word-break: break-word; min-height: 230px; }
+.out mark { background: var(--danger-soft); color: var(--danger); border-radius: 4px; padding: 0 4px; font-weight: 500; }
+.verdict { font: 600 12px var(--mono); padding: 3px 10px; border-radius: 999px; letter-spacing: .04em; }
+.verdict.block { background: var(--danger-soft); color: var(--danger); }
+.verdict.ok { background: var(--signal-soft); color: var(--signal); }
+.verdict.pop { animation: pop .35s ease; }
+@keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.findings { display: flex; flex-wrap: wrap; gap: 8px; }
+.findings span { font: 12px var(--mono); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; color: var(--muted); }
+.findings b { color: var(--fg); font-weight: 500; }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+
+/* Work */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button { font: 500 13px var(--mono); padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; transition: background .2s, color .2s; }
+.filters button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.case { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0; overflow: hidden; }
+.case::before { content: ""; position: absolute; inset: 0; background: radial-gradient(320px circle at var(--mx, -400px) var(--my, -400px), var(--accent-soft), transparent 70%); opacity: 0; transition: opacity .25s; pointer-events: none; }
+.case:hover::before { opacity: 1; }
+.case > * { position: relative; }
+.case .where { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.case h3 { font-size: 21px; font-weight: 700; }
+.case p { margin: 0; font-size: 15px; }
+.case .result { color: var(--signal); font-weight: 600; font-size: 14px; }
+.links { display: flex; gap: 14px; font: 500 13px var(--mono); }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; }
+.stack li { list-style: none; font-family: var(--mono); font-size: 12px; padding: 2px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+.case.enter { animation: enter .45s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes enter { from { transform: translateY(14px) scale(.98); opacity: .2; } to { transform: none; opacity: 1; } }
+
+/* Marquee */
+.band { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 18px; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.track { display: flex; gap: 40px; width: max-content; animation: slide 38s linear infinite; }
+.band:hover .track { animation-play-state: paused; }
+.track span { font-family: var(--display); font-size: clamp(22px, 3vw, 32px); font-weight: 700; white-space: nowrap; color: var(--fg); }
+.track span:nth-child(3n+2) { color: var(--accent); }
+.track span:nth-child(3n) { color: var(--muted); }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+/* Timeline */
+.timeline { list-style: none; padding: 0 0 0 28px; margin: 0; display: grid; position: relative; }
+.timeline::before { content: ""; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+.timeline::after { content: ""; position: absolute; left: 6px; top: 0; width: 2px; height: 100%; background: var(--accent); transform-origin: top; transform: scaleY(var(--tp, 1)); }
+.timeline li { display: grid; grid-template-columns: 180px 1fr; gap: 8px 28px; padding: 20px 0; position: relative; }
+.timeline li::before { content: ""; position: absolute; left: -27px; top: 28px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); z-index: 1; }
+.when { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.timeline h3 { font-size: 20px; font-weight: 700; }
+.timeline .co { color: var(--muted); font-size: 15px; }
+.timeline p { margin: 6px 0 0; font-size: 15px; max-width: 60ch; }
+
+/* Skills */
+.skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+.skills div { display: grid; gap: 10px; align-content: start; }
+.skills .stack li { background: transparent; border: 1px solid var(--line); color: var(--fg); transition: border-color .2s, color .2s; }
+.skills .stack li:hover { border-color: var(--accent); color: var(--accent); }
+
+.closing { border-top: 1px solid var(--line); padding-top: 40px; display: grid; gap: 16px; }
+.closing h2 { font-size: clamp(28px, 4vw, 42px); }
+.closing p { margin: 0; color: var(--muted); max-width: 40em; }
+
+/* Reveal: elements are visible at rest; ones below the fold get a gentle lift when they scroll in. */
+.rv { transition: transform .7s cubic-bezier(.2,.7,.2,1), opacity .7s; }
+.rv.below { transform: translateY(28px); opacity: .35; }
+
+@media (max-width: 820px) {
+  .hero { grid-template-columns: 1fr; }
+  .demo { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .wrap { padding-block: 32px 56px; gap: 72px; }
+  .timeline li { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 .ch { animation: rise .7s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 35ms); }
+  @keyframes rise { from { transform: translateY(.45em) rotate(4deg); opacity: 0; } to { transform: none; opacity: 1; } }
+  .hero-text > *:not(h1) { animation: fade .8s ease both; animation-delay: .45s; }
+  @keyframes fade { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .trace .wire.flow { animation: dash 1.4s linear infinite; }
+  @keyframes dash { to { stroke-dashoffset: -28; } }
+  .clock .dot { animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+  .rotator span { transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s; }
+  .rotator span.out-up { transform: translateY(-100%); opacity: 0; }
+  .rotator span.in-down { transform: translateY(100%); opacity: 0; }
+  .case { transition: transform .2s ease, border-color .2s ease; }
+  .case:hover { transform: translateY(-3px); border-color: var(--accent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; flex-wrap: wrap; width: auto; }
+  .trace .pkt { display: none; }
+  .rv.below { transform: none; opacity: 1; }
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-text">
+      <div class="role">Senior Full-Stack Engineer · Node.js / TypeScript · AI Agents &amp; LLM Integration</div>
+      <h1 id="name" aria-label="Arham Naeem">Arham Naeem</h1>
+      <p class="thesis">I build production Node.js and TypeScript systems end to end, from interface to deployment on AWS. Lately that means
+        <span class="rotator" aria-live="off"><span id="rot">AI voice agents</span></span>
+        for fintech, healthtech and compliance teams.</p>
+      <div class="contact">
+        <span class="email" id="email">arhamn205@gmail.com</span>
+        <button class="btn" id="copy-email" type="button">Copy email</button>
+        <a href="https://github.com/ArhamNaeem" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/arhamnaeem-software-developer" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div class="clocks" aria-label="Current time where I am and where my teams have been">
+        <div class="clock home"><span class="dot"></span><b>Karachi</b> <span data-tz="Asia/Karachi">--:--</span> <span>UTC+5</span></div>
+        <div class="clock"><b>Dubai</b> <span data-tz="Asia/Dubai">--:--</span></div>
+        <div class="clock"><b>London</b> <span data-tz="Europe/London">--:--</span></div>
+        <div class="clock"><b>Berlin</b> <span data-tz="Europe/Berlin">--:--</span></div>
+      </div>
+    </div>
+
+    <figure style="margin:0">
+      <svg class="trace" viewBox="0 0 520 320" role="img" aria-label="Diagram of the stack I build: client to API, then to an LLM, Redis and PostgreSQL, all deployed on AWS">
+        <path id="w1" class="wire" d="M100 160 H190"/>
+        <path id="w2" class="wire" d="M270 160 C300 160 300 70 330 70"/>
+        <path id="w3" class="wire" d="M270 160 H330"/>
+        <path id="w4" class="wire" d="M270 160 C300 160 300 250 330 250"/>
+        <path id="w5" class="wire" d="M410 70 C440 70 440 160 440 160"/>
+        <path id="w6" class="wire" d="M410 160 H430"/>
+        <path id="w7" class="wire" d="M410 250 C440 250 440 160 440 160"/>
+        <path class="wire flow" d="M100 160 H190"/>
+        <path class="wire flow" d="M270 160 C300 160 300 70 330 70"/>
+        <path class="wire flow" d="M270 160 C300 160 300 250 330 250"/>
+
+        <g class="node"><rect x="20" y="132" width="80" height="56" rx="10"/><text x="60" y="157" text-anchor="middle">Client</text><text class="sub" x="60" y="174" text-anchor="middle">Next.js</text></g>
+        <g class="node hot"><rect x="190" y="132" width="80" height="56" rx="10"/><text x="230" y="157" text-anchor="middle">API</text><text class="sub" x="230" y="174" text-anchor="middle">NestJS</text></g>
+        <g class="node"><rect x="330" y="42" width="80" height="56" rx="10"/><text x="370" y="67" text-anchor="middle">LLM</text><text class="sub" x="370" y="84" text-anchor="middle">OpenAI</text></g>
+        <g class="node"><rect x="330" y="132" width="80" height="56" rx="10"/><text x="370" y="157" text-anchor="middle">Redis</text><text class="sub" x="370" y="174" text-anchor="middle">queues</text></g>
+        <g class="node"><rect x="330" y="222" width="80" height="56" rx="10"/><text x="370" y="247" text-anchor="middle">Postgres</text><text class="sub" x="370" y="264" text-anchor="middle">+ Typesense</text></g>
+        <g class="node hot"><rect x="430" y="132" width="70" height="56" rx="10"/><text x="465" y="157" text-anchor="middle">AWS</text><text class="sub" x="465" y="174" text-anchor="middle">Docker</text></g>
+
+        <circle class="pkt" r="5"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#w1"/></animateMotion></circle>
+        <circle class="pkt" r="5"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite"><mpath href="#w1"/></animateMotion></circle>
+        <circle class="pkt alt" r="4.5"><animateMotion dur="2.2s" begin="0.3s" repeatCount="indefinite"><mpath href="#w2"/></animateMotion></circle>
+        <circle class="pkt" r="4.5"><animateMotion dur="1.4s" begin="0.6s" repeatCount="indefinite"><mpath href="#w3"/></animateMotion></circle>
+        <circle class="pkt alt" r="4.5"><animateMotion dur="2.4s" begin="1s" repeatCount="indefinite"><mpath href="#w4"/></animateMotion></circle>
+        <circle class="pkt" r="4"><animateMotion dur="1.8s" begin="0.4s" repeatCount="indefinite"><mpath href="#w5"/></animateMotion></circle>
+        <circle class="pkt alt" r="4"><animateMotion dur="1.8s" begin="1.2s" repeatCount="indefinite"><mpath href="#w7"/></animateMotion></circle>
+      </svg>
+      <figcaption class="trace-cap">The path a request takes through the systems I build</figcaption>
+    </figure>
+  </header>
+
+  <div class="outcomes rv" aria-label="Measured results">
+    <div class="outcome"><strong data-count="4" data-suffix=" yrs">4 yrs</strong><span>shipping production systems for remote teams</span></div>
+    <div class="outcome"><strong data-count="40" data-suffix="%">40%</strong><span>lower search latency (Typesense + PostgreSQL)</span></div>
+    <div class="outcome"><strong data-count="90" data-suffix="%">90%</strong><span>test coverage on NestJS payment and auth APIs</span></div>
+    <div class="outcome"><strong data-count="25" data-suffix="%">25%</strong><span>faster incident response after containerizing services</span></div>
+    <div class="outcome"><strong data-count="100" data-prefix="&lt;" data-suffix=" ms">&lt;100 ms</strong><span>interaction latency in real-time chat</span></div>
+  </div>
+
+  <section id="demo" class="rv" aria-labelledby="demo-h">
+    <div class="sec-head">
+      <div style="display:grid;gap:8px">
+        <span class="label">Live demo · runs in your browser</span>
+        <h2 id="demo-h">Try the data-loss guard</h2>
+      </div>
+      <p>At Observeri I built a browser extension that stops sensitive data from reaching AI tools like ChatGPT. This is a small in-page version of that idea: type or paste anything and see what would be blocked.</p>
+    </div>
+    <div class="demo">
+      <div class="pane">
+        <div class="pane-head"><span>Prompt about to be sent to an AI tool</span><button class="btn" id="reset-demo" type="button">Reset</button></div>
+        <textarea id="dlp-in" aria-label="Text to scan" spellcheck="false">Hi, can you summarise this customer ticket?
+Customer: Sara Khan, sara.khan@example.com, +92 300 1234567
+CNIC 42101-1234567-1, card 4111 1111 1111 1111
+Our staging key is sk-test-51Hx9aQ2bLm7Zp0Rt8 and the issue started after the last deploy.</textarea>
+      </div>
+      <div class="pane">
+        <div class="pane-head"><span>What the guard lets through</span><span class="verdict block" id="verdict">Blocked</span></div>
+        <div class="out" id="dlp-out" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="findings" id="findings"></div>
+    <p class="note">Demo of the concept with simple pattern matching. The production extension also OCR-scans images and file uploads.</p>
+  </section>
+
+  <section id="work" aria-labelledby="work-h">
+    <div class="sec-head">
+      <h2 id="work-h">Selected work</h2>
+      <div class="filters" role="group" aria-label="Filter projects">
+        <button type="button" id="f-all" data-f="all" aria-pressed="true">All</button>
+        <button type="button" id="f-ai" data-f="ai" aria-pressed="false">AI</button>
+        <button type="button" id="f-backend" data-f="backend" aria-pressed="false">Backend</button>
+        <button type="button" id="f-frontend" data-f="frontend" aria-pressed="false">Frontend</button>
+        <button type="button" id="f-infra" data-f="infra" aria-pressed="false">Infra</button>
+      </div>
+    </div>
+    <!-- To add links: put a URL in data-demo (live site or video) and/or data-code (GitHub) on any card. Buttons appear automatically. -->
+    <div class="grid" id="grid">
+      <article class="case" data-tags="ai frontend" data-demo="#demo" data-demo-label="Try it above">
+        <div class="where">Observeri Technology · 2026</div>
+        <h3>Data-loss-prevention browser extension</h3>
+        <p>OCR-scans outgoing text and file uploads and blocks sensitive data before it reaches external AI tools such as ChatGPT and Claude.</p>
+        <ul class="stack"><li>Browser extension</li><li>OCR</li><li>Compliance</li></ul>
+      </article>
+      <article class="case" data-tags="ai backend" data-demo="" data-code="">
+        <div class="where">Bonded AI · 2025</div>
+        <h3>AI voice agent for patient appointments</h3>
+        <p>Books patient appointments and places a natural-language reminder call to each patient the day before to confirm the time.</p>
+        <ul class="stack"><li>Node.js</li><li>Twilio</li><li>OpenAI</li></ul>
+      </article>
+      <article class="case" data-tags="backend infra" data-demo="" data-code="">
+        <div class="where">Observeri Technology · 2026</div>
+        <h3>On-premise asset discovery agent</h3>
+        <p>A cross-platform agent that discovers and inventories client assets and streams results into the GRC platform, replacing a manual asset audit with continuous automated coverage.</p>
+        <ul class="stack"><li>Go</li><li>Cross-platform</li><li>GRC</li></ul>
+      </article>
+      <article class="case" data-tags="backend" data-demo="" data-code="">
+        <div class="where">Observeri Technology · 2026</div>
+        <h3>Risk-based notification engine</h3>
+        <p>Owned end to end. Replaced ad hoc manual alerting with a cron-scheduled, Redis-backed pipeline that delivers risk-driven notifications across the entire client base.</p>
+        <ul class="stack"><li>Node.js</li><li>Redis</li><li>Cron</li></ul>
+      </article>
+      <article class="case" data-tags="infra ai" data-demo="" data-code="">
+        <div class="where">Observeri Technology · 2026</div>
+        <h3>CI/CD and AWS migration</h3>
+        <p>Containerized and deployed multiple AI models to Railway via Docker, and migrated the production database from Neon DB to AWS.</p>
+        <p class="result">Better cost, performance and compliance posture</p>
+        <ul class="stack"><li>Docker</li><li>CI/CD</li><li>AWS</li><li>Railway</li></ul>
+      </article>
+      <article class="case" data-tags="backend" data-demo="" data-code="">
+        <div class="where">Bonded AI · 2025</div>
+        <h3>Global search system</h3>
+        <p>Designed and built search with optimized indexing and caching, improving query accuracy.</p>
+        <p class="result">40% lower search latency</p>
+        <ul class="stack"><li>Typesense</li><li>PostgreSQL</li></ul>
+      </article>
+      <article class="case" data-tags="backend frontend" data-demo="" data-code="">
+        <div class="where">Bonded AI · 2025</div>
+        <h3>DICOM desktop sync service</h3>
+        <p>Monitors user-defined folders for DICOM files and processes thousands of medical files a day through a fault-tolerant queue.</p>
+        <p class="result">Zero data loss through crashes and network failures</p>
+        <ul class="stack"><li>Electron</li><li>Queues</li><li>Healthtech</li></ul>
+      </article>
+      <article class="case" data-tags="backend" data-demo="" data-code="">
+        <div class="where">HashPotato · 2024</div>
+        <h3>Payments, auth and workflow APIs</h3>
+        <p>Scalable backend APIs for authentication, PayPal and Stripe payment processing, and job workflow automation.</p>
+        <p class="result">90% test coverage</p>
+        <ul class="stack"><li>NestJS</li><li>Stripe</li><li>PayPal</li></ul>
+      </article>
+      <article class="case" data-tags="frontend" data-demo="" data-code="">
+        <div class="where">HashPotato · 2024</div>
+        <h3>Admin dashboards and real-time chat</h3>
+        <p>Next.js admin dashboards implemented from Figma, matching approved designs on the first pass, and React Native chat interfaces.</p>
+        <p class="result">Under 100 ms interaction latency</p>
+        <ul class="stack"><li>Next.js</li><li>React Native</li><li>Figma</li></ul>
+      </article>
+      <article class="case" data-tags="backend" data-demo="" data-code="">
+        <div class="where">Canadatel.net · 2024</div>
+        <h3>SIP call-flow analysis pipeline</h3>
+        <p>Connects to remote servers over SSH, processes thousands of SIP packets daily and parses them into structured call-flow analysis.</p>
+        <ul class="stack"><li>Python</li><li>SSH</li><li>VoIP</li></ul>
+      </article>
+      <article class="case" data-tags="ai" data-demo="" data-code="">
+        <div class="where">Medology Enterprise · 2023</div>
+        <h3>RAG chatbot over medical content</h3>
+        <p>Answers domain-specific questions over proprietary medical content using retrieval-augmented generation.</p>
+        <ul class="stack"><li>LangChain</li><li>OpenAI</li><li>Vector search</li></ul>
+      </article>
+      <article class="case" data-tags="backend infra" data-demo="" data-code="">
+        <div class="where">Medology · Canadatel · 2023–24</div>
+        <h3>API performance and hardening</h3>
+        <p>Optimized MongoDB schemas, indexes and queries; containerized services with monitoring; added key-based SSH authentication to close a common attack vector.</p>
+        <p class="result">30% lower latency under load · 25% faster incident response</p>
+        <ul class="stack"><li>MongoDB</li><li>Docker</li><li>Spring Boot</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <div class="band" aria-label="Technologies I use">
+    <div class="track" id="track">
+      <span>TypeScript</span><span>Node.js</span><span>NestJS</span><span>Next.js</span><span>React</span><span>PostgreSQL</span><span>Redis</span><span>OpenAI</span><span>LangChain</span><span>Twilio</span><span>AWS</span><span>Docker</span><span>Go</span><span>Python</span><span>Typesense</span>
+    </div>
+  </div>
+
+  <section class="rv" aria-labelledby="exp-h">
+    <h2 id="exp-h" class="sec-head">Experience</h2>
+    <ol class="timeline" id="timeline">
+      <li><div class="when">Jan 2026 – Oct 2026</div><div><h3>Lead Full Stack Developer</h3><div class="co">Observeri Technology · Dubai, UAE · Remote</div><p>Compliance/GRC platform: DLP extension, Go asset agent, notification engine, CI/CD and AWS migration.</p></div></li>
+      <li><div class="when">Feb 2025 – Jan 2026</div><div><h3>Full Stack Developer</h3><div class="co">Bonded AI · California, US · Remote</div><p>AI voice agent, global search, DICOM sync service.</p></div></li>
+      <li><div class="when">Aug 2024 – Jan 2025</div><div><h3>Software Engineer</h3><div class="co">HashPotato · Karachi, Pakistan</div><p>NestJS payment and auth APIs, Next.js dashboards, React Native chat.</p></div></li>
+      <li><div class="when">Dec 2023 – Aug 2024</div><div><h3>Full Stack Developer</h3><div class="co">Canadatel.net · Toronto, Canada · Remote</div><p>Python SIP pipeline, Docker and monitoring, SSH hardening.</p></div></li>
+      <li><div class="when">Jul 2023 – Dec 2023</div><div><h3>Full Stack Developer</h3><div class="co">Medology Enterprise · London, UK · Remote</div><p>RAG chatbot, MongoDB optimization, secure REST APIs.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="rv" aria-labelledby="skills-h">
+    <h2 id="skills-h" class="sec-head">Skills</h2>
+    <div class="skills">
+      <div><span class="label">Core</span><ul class="stack"><li>TypeScript</li><li>Node.js</li><li>NestJS</li><li>Next.js</li><li>React</li><li>PostgreSQL</li><li>Redis</li><li>REST</li><li>GraphQL</li></ul></div>
+      <div><span class="label">AI</span><ul class="stack"><li>LLM tool calling</li><li>RAG</li><li>OpenAI APIs</li><li>LangChain</li><li>Voice agents (Twilio)</li><li>OCR</li><li>AI model deployment</li></ul></div>
+      <div><span class="label">Infra</span><ul class="stack"><li>AWS</li><li>Docker</li><li>CI/CD</li><li>Railway</li></ul></div>
+      <div><span class="label">Also used</span><ul class="stack"><li>Go</li><li>Python</li><li>Java / Spring Boot</li><li>MongoDB</li><li>Supabase</li><li>Typesense</li><li>Electron</li><li>React Native</li><li>Tailwind</li></ul></div>
+    </div>
+    <div class="label">Education · BS Computer Science, Bahria University, Karachi · 2024</div>
+  </section>
+
+  <footer class="closing rv">
+    <h2>Let's talk</h2>
+    <p>I work remotely from Karachi (UTC+5), with working-hour overlap across Europe and the Gulf. Email is the fastest way to reach me.</p>
+    <div class="contact">
+      <span class="email">arhamn205@gmail.com</span>
+      <span class="email">+92 310 0224276</span>
+      <a href="https://github.com/ArhamNaeem" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/arhamnaeem-software-developer" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Name: split into letters for the staggered entrance
+  var h1 = document.getElementById('name');
+  var txt = h1.textContent; h1.textContent = '';
+  txt.split('').forEach(function (c, i) {
+    var s = document.createElement('span'); s.className = 'ch'; s.setAttribute('aria-hidden', 'true');
+    s.style.setProperty('--i', i); s.textContent = c === ' ' ? ' ' : c; h1.appendChild(s);
+  });
+
+  // Rotating phrase
+  var words = ['AI voice agents', 'LLM compliance tooling', 'data pipelines', 'payment APIs', 'RAG chatbots', 'search systems'];
+  var rot = document.getElementById('rot'), wi = 0;
+  if (!reduce) setInterval(function () {
+    wi = (wi + 1) % words.length;
+    var next = document.createElement('span'); next.textContent = words[wi]; next.className = 'in-down';
+    rot.parentNode.appendChild(next);
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      rot.className = 'out-up'; next.className = '';
+      var old = rot; setTimeout(function () { old.remove(); }, 550); rot = next;
+    }); });
+  }, 2400);
+
+  // Clocks
+  function tick() {
+    document.querySelectorAll('[data-tz]').forEach(function (el) {
+      try { el.textContent = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: el.dataset.tz }).format(new Date()); }
+      catch (e) { el.textContent = ''; }
+    });
+  }
+  tick(); setInterval(tick, 30000);
+
+  // Copy email
+  var copyBtn = document.getElementById('copy-email');
+  copyBtn.addEventListener('click', function () {
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById('email'));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); copyBtn.textContent = 'Selected, press Ctrl+C';
+    }
+    try { navigator.clipboard.writeText('arhamn205@gmail.com').then(function () { copyBtn.textContent = 'Copied'; }, selectIt); }
+    catch (e) { selectIt(); }
+    setTimeout(function () { copyBtn.textContent = 'Copy email'; }, 2500);
+  });
+
+  // Scroll progress + timeline fill + reveal
+  var bar = document.getElementById('bar'), tl = document.getElementById('timeline');
+  function onScroll() {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.setProperty('--p', h > 0 ? Math.min(1, scrollY / h) : 0);
+    var r = tl.getBoundingClientRect();
+    var p = (innerHeight * 0.75 - r.top) / r.height;
+    tl.style.setProperty('--tp', Math.max(0, Math.min(1, p)));
+  }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  var rvs = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window && !reduce) {
+    rvs.forEach(function (el) { if (el.getBoundingClientRect().top > innerHeight) el.classList.add('below'); });
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.remove('below'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    rvs.forEach(function (el) { io.observe(el); });
+  }
+
+  // Count-up numbers (final values are already in the HTML)
+  function countUp(el) {
+    var end = +el.dataset.count, pre = el.dataset.prefix || '', suf = el.dataset.suffix || '', t0 = null;
+    function step(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1100); var v = Math.round(end * (1 - Math.pow(1 - k, 3)));
+      el.textContent = pre + v + suf; if (k < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  if (!reduce && 'IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); } });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('[data-count]').forEach(function (el) { cio.observe(el); });
+  }
+
+  // Cursor spotlight on cards + demo/code links
+  document.querySelectorAll('.case').forEach(function (c) {
+    c.addEventListener('pointermove', function (e) {
+      var r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+    var demo = c.dataset.demo, code = c.dataset.code;
+    if (demo || code) {
+      var l = document.createElement('div'); l.className = 'links';
+      if (demo) { var a = document.createElement('a'); a.href = demo; a.textContent = (c.dataset.demoLabel || 'Live demo') + ' →'; if (demo.charAt(0) !== '#') { a.target = '_blank'; a.rel = 'noopener'; } l.appendChild(a); }
+      if (code) { var b = document.createElement('a'); b.href = code; b.target = '_blank'; b.rel = 'noopener'; b.textContent = 'Code →'; l.appendChild(b); }
+      c.appendChild(l);
+    }
+  });
+
+  // Filters with re-entry animation
+  var buttons = document.querySelectorAll('.filters button'), cases = document.querySelectorAll('.case');
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.dataset.f, n = 0;
+      buttons.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      cases.forEach(function (c) {
+        var show = f === 'all' || c.dataset.tags.split(' ').indexOf(f) !== -1;
+        c.hidden = !show; c.classList.remove('enter');
+        if (show && !reduce) { void c.offsetWidth; c.style.animationDelay = (n++ * 45) + 'ms'; c.classList.add('enter'); }
+      });
+    });
+  });
+
+  // Marquee: duplicate the track so it loops seamlessly
+  var track = document.getElementById('track');
+  if (!reduce) track.innerHTML += track.innerHTML.replace(/<span>/g, '<span aria-hidden="true">');
+
+  // DLP demo
+  var rules = [
+    { name: 'Email', re: /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi },
+    { name: 'API key', re: /\b(?:sk|pk|rk)[-_](?:live|test)?[-_]?[A-Za-z0-9]{12,}\b|\bAKIA[0-9A-Z]{16}\b|\bgh[pousr]_[A-Za-z0-9]{20,}\b/g },
+    { name: 'Card number', re: /\b(?:\d[ -]?){13,19}\b/g, check: luhn },
+    { name: 'CNIC', re: /\b\d{5}-\d{7}-\d\b/g },
+    { name: 'Phone', re: /(?:\+\d{1,3}[ -]?)?(?:\(?\d{3}\)?[ -]?)\d{3}[ -]?\d{4}\b/g }
+  ];
+  function luhn(s) {
+    var d = s.replace(/\D/g, ''); if (d.length < 13) return false; var sum = 0, alt = false;
+    for (var i = d.length - 1; i >= 0; i--) { var n = +d[i]; if (alt) { n *= 2; if (n > 9) n -= 9; } sum += n; alt = !alt; }
+    return sum % 10 === 0;
+  }
+  function esc(s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var inp = document.getElementById('dlp-in'), out = document.getElementById('dlp-out'), verdict = document.getElementById('verdict'), findings = document.getElementById('findings');
+  var sample = inp.value, lastBlocked = null;
+  function scan() {
+    var text = inp.value, hits = [];
+    rules.forEach(function (r) {
+      r.re.lastIndex = 0; var m;
+      while ((m = r.re.exec(text))) {
+        if (r.check && !r.check(m[0])) continue;
+        var s = m.index, e = s + m[0].length;
+        if (!hits.some(function (h) { return s < h.e && e > h.s; })) hits.push({ s: s, e: e, name: r.name });
+      }
+    });
+    hits.sort(function (a, b) { return a.s - b.s; });
+    var html = '', pos = 0, counts = {};
+    hits.forEach(function (h) { html += esc(text.slice(pos, h.s)) + '<mark title="' + h.name + '">[' + h.name.toUpperCase() + ' REMOVED]</mark>'; pos = h.e; counts[h.name] = (counts[h.name] || 0) + 1; });
+    html += esc(text.slice(pos));
+    out.innerHTML = html || '<span style="color:var(--muted)">Nothing to send.</span>';
+    var blocked = hits.length > 0;
+    verdict.className = 'verdict ' + (blocked ? 'block' : 'ok');
+    verdict.textContent = blocked ? 'Blocked · ' + hits.length + ' item' + (hits.length > 1 ? 's' : '') : 'Safe to send';
+    if (lastBlocked !== null && lastBlocked !== blocked && !reduce) { void verdict.offsetWidth; verdict.classList.add('pop'); }
+    lastBlocked = blocked;
+    findings.innerHTML = Object.keys(counts).map(function (k) { return '<span>' + k + ' <b>' + counts[k] + '</b></span>'; }).join('');
+  }
+  inp.addEventListener('input', scan);
+  document.getElementById('reset-demo').addEventListener('click', function () { inp.value = sample; scan(); });
+  scan();
+})();
+</script>
+</body>
+</html>
